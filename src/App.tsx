@@ -25,7 +25,8 @@ import { ScrollArea } from "./components/ui/scroll-area";
 import { Card, CardContent } from "./components/ui/card";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "./components/ui/utils";
-import { InventoryManager } from "./components/inventory/InventoryManager";
+
+import { InventoryGuide } from "./components/InventoryGuide";
 
 // --- Data Structure ---
 
@@ -300,12 +301,11 @@ const SectionCard = ({ section, onClick, progress }: { section: Section, onClick
   );
 };
 
-const ChecklistDetail = ({ section, checkedItems: initialCheckedItems, onSave, onCancel, onOpenInventory }: { 
+const ChecklistDetail = ({ section, checkedItems: initialCheckedItems, onSave, onCancel }: { 
   section: Section, 
   checkedItems: Record<string, boolean>, 
   onSave: (items: Record<string, boolean>) => void,
-  onCancel: () => void,
-  onOpenInventory?: () => void
+  onCancel: () => void
 }) => {
   const Icon = section.icon;
   const [localCheckedItems, setLocalCheckedItems] = useState(initialCheckedItems);
@@ -341,28 +341,7 @@ const ChecklistDetail = ({ section, checkedItems: initialCheckedItems, onSave, o
       {/* Content */}
       <ScrollArea className="flex-1 p-4 pb-24 bg-slate-50">
         <div className="max-w-2xl mx-auto space-y-6">
-          {/* Inventory Call to Action */}
-          {section.id === 'cleanup' && (
-            <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-100 shadow-sm mb-6">
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="p-3 bg-emerald-100 rounded-full">
-                  <FileSpreadsheet className="w-6 h-6 text-emerald-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-emerald-900">บัญชีทรัพย์สินเสียหาย<br/><span className="text-sm font-normal opacity-80">Damage Asset Inventory</span></h3>
-                  <p className="text-xs text-emerald-700 mb-2">บันทึกรายการพร้อมคำนวณมูลค่าเพื่อขอเยียวยา (Record items & estimate value for claims)</p>
-                  <Button 
-                    size="sm" 
-                    className="bg-emerald-600 hover:bg-emerald-700 w-full sm:w-auto"
-                    onClick={onOpenInventory}
-                  >
-                    เปิดระบบทำบัญชี (Open Inventory)
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
+          
           {section.subSections.map((sub, idx) => (
             <div key={idx} className="space-y-3">
               <h3 className="font-semibold text-slate-800 text-lg flex items-center gap-2">
@@ -437,8 +416,8 @@ const ChecklistDetail = ({ section, checkedItems: initialCheckedItems, onSave, o
 
 export default function App() {
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
+  const [showGuide, setShowGuide] = useState(false);
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
-  const [showInventory, setShowInventory] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -606,6 +585,15 @@ export default function App() {
                    <a href="tel:1323" className="flex items-center gap-1.5 text-xs font-semibold bg-white px-3 py-2 rounded-lg text-slate-700 border shadow-sm hover:bg-slate-50 active:scale-95 transition-all">
                      <Phone className="w-3.5 h-3.5 text-pink-500" /> สายด่วนสุขภาพจิต (Mental Health) 1323
                    </a>
+                     <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="h-auto py-2 px-3 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 border-slate-200 shadow-sm"
+                      onClick={() => setShowGuide(true)}
+                    >
+                      <FileText className="w-3.5 h-3.5 mr-1.5" />
+                      คู่มือทำบัญชีของเสียหาย
+                   </Button>
                    <Button 
                       variant="outline" 
                       size="sm"
@@ -637,56 +625,52 @@ export default function App() {
               />
             ))}
           </div>
-        </div>
-        
-        {/* Footer Actions */}
-        <div className="pt-8 pb-4 flex flex-col items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-slate-400 hover:text-red-500 hover:bg-red-50 text-xs"
-            onClick={handleReset}
-          >
-            <RotateCcw className="w-3 h-3 mr-1" />
-            ล้างข้อมูลความคืบหน้าทั้งหมด (Reset All Progress)
-          </Button>
-          
-          <div className="text-center text-slate-300 text-[10px]">
-            <p>ด้วยความห่วงใยและความปลอดภัย</p>
-            <p>Developed by Kobie Arayatakul</p>
+
+          <div className="flex justify-center mt-8 pb-8">
+            <Button 
+              variant="ghost" 
+              className="text-slate-400 hover:text-red-500 hover:bg-red-50 text-sm"
+              onClick={handleReset}
+            >
+              <RotateCcw className="w-4 h-4 mr-2" />
+              ล้างข้อมูลทั้งหมด (Reset All Progress)
+            </Button>
           </div>
         </div>
+        </main>
+      </div>
 
-      </main>
-
-      {/* Inventory Manager Overlay */}
+      {/* Detail Modal */}
       <AnimatePresence>
-        {showInventory && (
+        {activeSection && (
+          <ChecklistDetail 
+            section={activeSection} 
+            checkedItems={checkedItems}
+            onSave={handleSave}
+            onCancel={() => setActiveSectionId(null)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showGuide && (
           <motion.div 
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[60] bg-slate-50"
+            className="fixed inset-0 bg-white z-50 overflow-y-auto"
           >
-            <InventoryManager onClose={() => setShowInventory(false)} />
+            <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center z-10">
+               <h2 className="font-bold text-lg">คู่มือทำบัญชีทรัพย์สินเสียหาย</h2>
+               <Button variant="ghost" size="sm" onClick={() => setShowGuide(false)}>
+                 ปิด (Close)
+               </Button>
+            </div>
+            <InventoryGuide />
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Active Section Detail Overlay */}
-      <AnimatePresence>
-        {activeSection && (
-          <ChecklistDetail 
-            section={activeSection}
-            checkedItems={checkedItems}
-            onSave={handleSave}
-            onCancel={() => setActiveSectionId(null)}
-            onOpenInventory={() => setShowInventory(true)}
-          />
-        )}
-      </AnimatePresence>
-      </div>
     </div>
   );
 }
