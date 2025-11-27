@@ -2,18 +2,18 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   Search,
   Trash2,
-  Edit2,
+  Pencil,
   X,
   ChevronDown,
   FileSpreadsheet,
-  PieChart,
+  ChartPie,
   Settings,
   Plus,
   Printer,
   Calculator,
   Camera,
-  AlertTriangle,
-  CheckCircle2,
+  TriangleAlert,
+  CircleCheck,
   Clock,
   DollarSign,
 } from "lucide-react";
@@ -113,53 +113,53 @@ export type InventoryCategory = {
 const DEFAULT_CATEGORIES: InventoryCategory[] = [
   {
     id: "electrical",
-    name: "เครื่องใช้ไฟฟ้า",
+    name: "เครื่องใช้ไฟฟ้า (Electrical)",
     subCategories: [
-      "ทีวี",
-      "ตู้เย็น",
-      "เครื่องซักผ้า",
-      "พัดลม",
-      "แอร์",
-      "คอมพิวเตอร์",
-      "หม้อหุงข้าว",
+      "ทีวี (TV)",
+      "ตู้เย็น (Refrigerator)",
+      "เครื่องซักผ้า (Washing Machine)",
+      "พัดลม (Fan)",
+      "แอร์ (Air Conditioner)",
+      "คอมพิวเตอร์ (Computer)",
+      "หม้อหุงข้าว (Rice Cooker)",
     ],
   },
   {
     id: "furniture",
-    name: "เฟอร์นิเจอร์",
+    name: "เฟอร์นิเจอร์ (Furniture)",
     subCategories: [
-      "เตียง",
-      "ตู้เสื้อผ้า",
-      "โต๊ะ",
-      "เก้าอี้",
-      "โซฟา",
-      "ชั้นวางของ",
-      "ที่นอน",
+      "เตียง (Bed)",
+      "ตู้เสื้อผ้า (Wardrobe)",
+      "โต๊ะ (Table)",
+      "เก้าอี้ (Chair)",
+      "โซฟา (Sofa)",
+      "ชั้นวางของ (Shelf)",
+      "ที่นอน (Mattress)",
     ],
   },
   {
     id: "livelihood",
-    name: "เครื่องมือทำมาหากิน",
+    name: "เครื่องมือทำมาหากิน (Livelihood Tools)",
     subCategories: [
-      "เครื่องตัดหญ้า",
-      "สว่าน",
-      "อุปกรณ์ขายของ",
-      "รถเข็น",
-      "เครื่องมือช่าง",
-      "ยานพาหนะ",
+      "เครื่องตัดหญ้า (Lawn Mower)",
+      "สว่าน (Drill)",
+      "อุปกรณ์ขายของ (Vending Equipment)",
+      "รถเข็น (Cart)",
+      "เครื่องมือช่าง (Tools)",
+      "ยานพาหนะ (Vehicle)",
     ],
   },
   {
     id: "structure",
-    name: "วัสดุก่อสร้าง/บ้าน",
+    name: "วัสดุก่อสร้าง/บ้าน (Structure/Materials)",
     subCategories: [
-      "ประตู",
-      "หน้าต่าง",
-      "พื้น",
-      "ผนัง",
-      "รั้ว",
-      "ระบบไฟฟ้า",
-      "สุขภัณฑ์",
+      "ประตู (Door)",
+      "หน้าต่าง (Window)",
+      "พื้น (Flooring)",
+      "ผนัง (Wall)",
+      "รั้ว (Fence)",
+      "ระบบไฟฟ้า (Wiring System)",
+      "สุขภัณฑ์ (Sanitary Ware)",
     ],
   },
 ];
@@ -169,22 +169,22 @@ const DAMAGE_LEVELS: Record<
   { label: string; color: string; defaultPercent: number }
 > = {
   minor: {
-    label: "เล็กน้อย",
+    label: "เล็กน้อย (Minor)",
     color: "bg-green-100 text-green-800",
     defaultPercent: 20,
   },
   moderate: {
-    label: "ปานกลาง",
+    label: "ปานกลาง (Moderate)",
     color: "bg-yellow-100 text-yellow-800",
     defaultPercent: 50,
   },
   severe: {
-    label: "รุนแรง",
+    label: "รุนแรง (Severe)",
     color: "bg-orange-100 text-orange-800",
     defaultPercent: 80,
   },
   total: {
-    label: "ใช้งานไม่ได้/สูญหาย",
+    label: "ใช้งานไม่ได้/สูญหาย (Total Loss)",
     color: "bg-red-100 text-red-800",
     defaultPercent: 100,
   },
@@ -301,7 +301,7 @@ export const InventoryManager = ({
   };
 
   const handleDeleteItem = (id: string) => {
-    if (window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?")) {
+    if (window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่? (Are you sure?)")) {
       setItems(items.filter((i) => i.id !== id));
     }
   };
@@ -427,19 +427,19 @@ export const InventoryManager = ({
 
         <div className="mb-8">
           <h3 className="font-bold text-lg mb-2 border-l-4 border-slate-800 pl-2">
-            สรุปมูลค่าความเสียหาย
+            สรุปมูลค่าความเสียหาย (Summary)
           </h3>
           <table className="w-full border-collapse border border-slate-300 text-sm">
             <thead className="bg-slate-100">
               <tr>
                 <th className="border border-slate-300 p-2 text-left">
-                  หมวดหมู่
+                  หมวดหมู่ (Category)
                 </th>
                 <th className="border border-slate-300 p-2 text-right">
-                  รายการ
+                  รายการ (Items)
                 </th>
                 <th className="border border-slate-300 p-2 text-right">
-                  มูลค่าความเสียหาย (บาท)
+                  มูลค่าความเสียหาย (Damage Value)
                 </th>
               </tr>
             </thead>
@@ -459,7 +459,7 @@ export const InventoryManager = ({
               ))}
               <tr className="font-bold bg-slate-50">
                 <td className="border border-slate-300 p-2">
-                  รวมทั้งสิ้น
+                  รวมทั้งสิ้น (Total)
                 </td>
                 <td className="border border-slate-300 p-2 text-right">
                   {items.length}
@@ -474,34 +474,34 @@ export const InventoryManager = ({
 
         <div>
           <h3 className="font-bold text-lg mb-2 border-l-4 border-slate-800 pl-2">
-            รายการละเอียด
+            รายการละเอียด (Detailed Items)
           </h3>
           <table className="w-full border-collapse border border-slate-300 text-[10px]">
             <thead className="bg-slate-100">
               <tr>
                 <th className="border border-slate-300 p-1 w-[20%]">
-                  ทรัพย์สิน/รายละเอียด
+                  ทรัพย์สิน/รายละเอียด (Asset/Detail)
                 </th>
                 <th className="border border-slate-300 p-1 w-[5%]">
-                  จน.
+                  จน. (Qty)
                 </th>
                 <th className="border border-slate-300 p-1 w-[10%]">
-                  ราคาเดิม
+                  ราคาเดิม (Orig. Price)
                 </th>
                 <th className="border border-slate-300 p-1 w-[10%]">
-                  มูลค่าปัจจุบัน
+                  มูลค่าปัจจุบัน (Curr. Val)
                 </th>
                 <th className="border border-slate-300 p-1 w-[15%]">
-                  ความเสียหาย
+                  ความเสียหาย (Damage)
                 </th>
                 <th className="border border-slate-300 p-1 w-[10%]">
-                  มูลค่าเสียหาย
+                  มูลค่าเสียหาย (Loss Val)
                 </th>
                 <th className="border border-slate-300 p-1 w-[10%]">
-                  สถานะซ่อม
+                  สถานะซ่อม (Repair)
                 </th>
                 <th className="border border-slate-300 p-1 w-[20%]">
-                  หมายเหตุ
+                  หมายเหตุ (Note)
                 </th>
               </tr>
             </thead>
@@ -566,11 +566,11 @@ export const InventoryManager = ({
 
         <div className="mt-8 border-t pt-4 flex justify-between text-xs text-slate-500">
           <div>
-            ลงชื่อเจ้าของทรัพย์สิน
+            ลงชื่อเจ้าของทรัพย์สิน (Owner Signature)
             .......................................................
           </div>
           <div>
-            ลงชื่อพยาน/ผู้ตรวจสอบ
+            ลงชื่อพยาน/ผู้ตรวจสอบ (Witness/Inspector)
             .......................................................
           </div>
         </div>
@@ -625,10 +625,10 @@ export const InventoryManager = ({
           >
             <TabsList className="w-full grid grid-cols-2">
               <TabsTrigger value="list">
-                รายการ ({items.length})
+                รายการ ({items.length}) <br/> <span className="text-[10px] font-normal ml-1 opacity-70 hidden sm:inline">Items</span>
               </TabsTrigger>
               <TabsTrigger value="summary">
-                สรุปและรายงาน
+                สรุปและรายงาน <br/> <span className="text-[10px] font-normal ml-1 opacity-70 hidden sm:inline">Summary & Report</span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -643,20 +643,20 @@ export const InventoryManager = ({
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <div className="text-slate-300 text-sm">
-                      มูลค่าความเสียหายสุทธิ
+                      มูลค่าความเสียหายสุทธิ (Net Damage Value)
                     </div>
                     <div className="text-4xl font-bold text-white mt-1">
                       {formatCurrency(totalDamageValue)}
                     </div>
                   </div>
                   <div className="bg-red-500/20 p-3 rounded-full">
-                    <AlertTriangle className="text-red-500 w-6 h-6" />
+                    <TriangleAlert className="text-red-500 w-6 h-6" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700">
                   <div>
                     <div className="text-xs text-slate-400">
-                      จำนวนรายการ
+                      จำนวนรายการ (Total Items)
                     </div>
                     <div className="font-semibold">
                       {items.length} รายการ
@@ -664,7 +664,7 @@ export const InventoryManager = ({
                   </div>
                   <div>
                     <div className="text-xs text-slate-400">
-                      จำนวนชิ้น
+                      จำนวนชิ้น (Total Quantity)
                     </div>
                     <div className="font-semibold">
                       {totalItems} ชิ้น
@@ -695,7 +695,7 @@ export const InventoryManager = ({
                           {formatCurrency(cat.totalDamage)}
                         </div>
                         <div className="text-xs text-slate-400">
-                          เสียหาย
+                          เสียหาย (Loss)
                         </div>
                       </div>
                     </div>
@@ -711,7 +711,7 @@ export const InventoryManager = ({
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <Input
-                  placeholder="ค้นหาชื่อ, รุ่น, หรืออาการเสีย..."
+                  placeholder="ค้นหาชื่อ, รุ่น, หรืออาการเสีย (Search name, model, damage)..."
                   value={searchTerm}
                   onChange={(e) =>
                     setSearchTerm(e.target.value)
@@ -727,7 +727,7 @@ export const InventoryManager = ({
                     setFilterCategory(e.target.value)
                   }
                 >
-                  <option value="all">ทุกหมวดหมู่</option>
+                  <option value="all">ทุกหมวดหมู่ (All Categories)</option>
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
@@ -741,11 +741,11 @@ export const InventoryManager = ({
                     setFilterStatus(e.target.value)
                   }
                 >
-                  <option value="all">ทุกสถานะซ่อม</option>
-                  <option value="pending">รอประเมิน</option>
-                  <option value="repairable">ซ่อมได้</option>
+                  <option value="all">ทุกสถานะซ่อม (All Repair Status)</option>
+                  <option value="pending">รอประเมิน (Pending)</option>
+                  <option value="repairable">ซ่อมได้ (Repairable)</option>
                   <option value="irreparable">
-                    ซ่อมไม่ได้
+                    ซ่อมไม่ได้ (Irreparable)
                   </option>
                 </select>
               </div>
@@ -762,13 +762,13 @@ export const InventoryManager = ({
                     ยังไม่มีรายการ
                   </p>
                   <p className="text-slate-500 text-sm mb-4">
-                    เริ่มบันทึกความเสียหายชิ้นแรก
+                    เริ่มบันทึกความเสียหายชิ้นแรก (Start recording your first damaged item)
                   </p>
                   <Button
                     onClick={() => setIsFormOpen(true)}
                     className="bg-emerald-600 hover:bg-emerald-700"
                   >
-                    + เพิ่มรายการใหม่
+                    + เพิ่มรายการใหม่ (Add New Item)
                   </Button>
                 </div>
               ) : (
@@ -831,7 +831,7 @@ export const InventoryManager = ({
 
                       <div className="flex items-center gap-4 text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">
                         <div className="flex items-center gap-1">
-                          <AlertTriangle className="w-3.5 h-3.5 text-orange-400" />
+                          <TriangleAlert className="w-3.5 h-3.5 text-orange-400" />
                           <span className="truncate max-w-[150px]">
                             {item.damageDetail}
                           </span>
@@ -915,7 +915,7 @@ const ItemFormDialog = ({
           categoryId: categories[0]?.id,
           quantity: 1,
           unit: "ชิ้น",
-          damageType: "���้ำท่วม",
+          damageType: "น้ำท่วม",
           damageLevel: "moderate",
           usability: "partial",
           repairStatus: "pending",
@@ -964,10 +964,10 @@ const ItemFormDialog = ({
       <DialogContent className="max-h-[95vh] flex flex-col p-0 sm:max-w-2xl w-[95vw] gap-0">
         <DialogHeader className="p-4 border-b bg-slate-50">
           <DialogTitle>
-            {initialData ? "แก้ไขรายการ" : "เพิ่มรายการใหม่"}
+            {initialData ? "แก้ไขรายการ (Edit Item)" : "เพิ่มรายการใหม่ (Add New Item)"}
           </DialogTitle>
           <DialogDescription>
-            บันทึกรายละเอียดทรัพย์สินและความเสียหาย
+            บันทึกรายละเอียดทรัพย์สินและความเสียหาย (Record asset details & damage)
           </DialogDescription>
         </DialogHeader>
 
@@ -980,13 +980,13 @@ const ItemFormDialog = ({
             <div className="sticky top-0 bg-white z-10 px-4 pt-2 border-b">
               <TabsList className="w-full grid grid-cols-3">
                 <TabsTrigger value="info">
-                  1. ข้อมูลทรัพย์สิน
+                  1. ข้อมูลทรัพย์สิน <br className="sm:hidden" />(Info)
                 </TabsTrigger>
                 <TabsTrigger value="damage">
-                  2. ความเสียหาย
+                  2. ความเสียหาย <br className="sm:hidden" />(Damage)
                 </TabsTrigger>
                 <TabsTrigger value="value">
-                  3. ประเมินมูลค่า
+                  3. ประเมินมูลค่า <br className="sm:hidden" />(Value)
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -1002,7 +1002,7 @@ const ItemFormDialog = ({
               >
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>หมวดหมู่</Label>
+                    <Label>หมวดหมู่ (Category)</Label>
                     <Select
                       value={
                         formData.categoryId || categories[0]?.id
@@ -1028,7 +1028,7 @@ const ItemFormDialog = ({
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>ประเภท (ย่อย)</Label>
+                    <Label>ประเภท (ย่อย) (Sub-category)</Label>
                     <div className="relative">
                       <Input
                         list="subcategories"
@@ -1054,7 +1054,7 @@ const ItemFormDialog = ({
 
                 <div className="space-y-2">
                   <Label>
-                    ชื่อทรัพย์สิน{" "}
+                    ชื่อทรัพย์สิน (Asset Name){" "}
                     <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -1066,13 +1066,13 @@ const ItemFormDialog = ({
                         name: e.target.value,
                       })
                     }
-                    placeholder="เช่น ตู้เย็น 2 ประตู"
+                    placeholder="เช่น ตู้เย็น 2 ประตู (e.g. 2-Door Fridge)"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label>
-                    ยี่ห้อ / รุ่น / รายละเอียดเพิ่มเติม
+                    ยี่ห้อ / รุ่น / รายละเอียด (Brand/Model/Desc)
                   </Label>
                   <Input
                     value={formData.description || ""}
@@ -1088,7 +1088,7 @@ const ItemFormDialog = ({
 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2 col-span-2">
-                    <Label>จำนวน</Label>
+                    <Label>จำนวน (Quantity)</Label>
                     <Input
                       type="number"
                       min="1"
@@ -1104,7 +1104,7 @@ const ItemFormDialog = ({
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>หน่วยนับ</Label>
+                    <Label>หน่วยนับ (Unit)</Label>
                     <Input
                       value={formData.unit || ""}
                       onChange={(e) =>
@@ -1113,7 +1113,7 @@ const ItemFormDialog = ({
                           unit: e.target.value,
                         })
                       }
-                      placeholder="ชิ้น, ชุด"
+                      placeholder="ชิ้น, ชุด (pcs, set)"
                     />
                   </div>
                 </div>
@@ -1122,7 +1122,7 @@ const ItemFormDialog = ({
                   <Clock className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
                   <div className="space-y-2 w-full">
                     <Label className="text-blue-900">
-                      ประวัติการซื้อ (ถ้าจำได้)
+                      ประวัติการซื้อ (Purchase History)
                     </Label>
                     <div className="grid grid-cols-2 gap-3">
                       <Input
@@ -1158,7 +1158,7 @@ const ItemFormDialog = ({
                           }
                         />
                         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
-                          ปี
+                          ปี (Yrs)
                         </span>
                       </div>
                     </div>
@@ -1171,7 +1171,7 @@ const ItemFormDialog = ({
                 className="space-y-4 mt-0"
               >
                 <div className="space-y-2">
-                  <Label>ระดับความเสียหาย</Label>
+                  <Label>ระดับความเสียหาย (Damage Level)</Label>
                   <div className="grid grid-cols-2 gap-2">
                     {(
                       Object.keys(
@@ -1204,10 +1204,10 @@ const ItemFormDialog = ({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>ลักษณะความเสียหาย (ละเอียด)</Label>
+                  <Label>ลักษณะความเสียหาย (Damage Detail)</Label>
                   <Textarea
                     className="min-h-[80px]"
-                    placeholder="เช่น จมน้ำมิดเครื่อง 3 วัน, สนิมเกาะมอเตอร์, บอร์ดวงจรช็อต"
+                    placeholder="เช่น จมน้ำมิดเครื่อง 3 วัน, สนิมเกาะมอเตอร์, บอร์ดวงจรช็อต (e.g. submerged 3 days, rusted motor)"
                     value={formData.damageDetail || ""}
                     onChange={(e) =>
                       setFormData({
@@ -1220,7 +1220,7 @@ const ItemFormDialog = ({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>ประเภทภัย</Label>
+                    <Label>ประเภทภัย (Disaster Type)</Label>
                     <Select
                       value={formData.damageType || "น้ำท่วม"}
                       onValueChange={(v) =>
@@ -1235,25 +1235,25 @@ const ItemFormDialog = ({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="น้ำท่วม">
-                          น้ำท่วม
+                          น้ำท่วม (Flood)
                         </SelectItem>
                         <SelectItem value="ไฟไหม้">
-                          ไฟไหม้
+                          ไฟไหม้ (Fire)
                         </SelectItem>
                         <SelectItem value="ดินโคลน">
-                          ดินโคลนถล่ม
+                          ดินโคลนถล่ม (Mudslide)
                         </SelectItem>
                         <SelectItem value="กระแสไฟฟ้า">
-                          ไฟฟ้าลัดวงจร
+                          ไฟฟ้าลัดวงจร (Short Circuit)
                         </SelectItem>
                         <SelectItem value="อื่นๆ">
-                          อื่นๆ
+                          อื่นๆ (Other)
                         </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>วันที่เกิดเหตุ</Label>
+                    <Label>วันที่เกิดเหตุ (Incident Date)</Label>
                     <Input
                       type="date"
                       value={formData.incidentDate || ""}
@@ -1268,7 +1268,7 @@ const ItemFormDialog = ({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>สถานะการใช้งาน & การซ่อม</Label>
+                  <Label>สถานะการใช้งาน & การซ่อม (Status)</Label>
                   <div className="grid grid-cols-2 gap-4">
                     <Select
                       value={formData.repairStatus || "pending"}
@@ -1284,16 +1284,16 @@ const ItemFormDialog = ({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="pending">
-                          รอประเมิน
+                          รอประเมิน (Pending)
                         </SelectItem>
                         <SelectItem value="repairable">
-                          ซ่อมได้
+                          ซ่อมได้ (Repairable)
                         </SelectItem>
                         <SelectItem value="irreparable">
-                          ซ่อมไม่ได้
+                          ซ่อมไม่ได้ (Irreparable)
                         </SelectItem>
                         <SelectItem value="repaired">
-                          ซ่อมแล้ว
+                          ซ่อมแล้ว (Repaired)
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -1311,13 +1311,13 @@ const ItemFormDialog = ({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="normal">
-                          ใช้งานได้ปกติ
+                          ใช้งานได้ปกติ (Normal)
                         </SelectItem>
                         <SelectItem value="partial">
-                          ใช้ได้บางส่วน
+                          ใช้ได้บางส่วน (Partial)
                         </SelectItem>
                         <SelectItem value="unusable">
-                          ใช้งานไม่ได้
+                          ใช้งานไม่ได้ (Unusable)
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -1341,8 +1341,7 @@ const ItemFormDialog = ({
                     <div className="grid grid-cols-1 gap-4">
                       <div className="space-y-1.5">
                         <Label>
-                          มูลค่าปัจจุบัน/หน่วย (Replacement
-                          Cost)
+                          มูลค่าปัจจุบัน/หน่วย (Replacement Cost)
                         </Label>
                         <div className="relative">
                           <DollarSign className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -1370,7 +1369,7 @@ const ItemFormDialog = ({
 
                       <div className="space-y-3">
                         <div className="flex justify-between text-sm">
-                          <Label>สัดส่วนความเสียหาย</Label>
+                          <Label>สัดส่วนความเสียหาย (Damage %)</Label>
                           <span className="font-bold text-red-600">
                             {formData.damagePercent || 0}%
                           </span>
@@ -1430,7 +1429,7 @@ const ItemFormDialog = ({
                 <div className="space-y-4 pt-2 border-t">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>ราคาซื้อเดิม (Reference)</Label>
+                      <Label>ราคาซื้อเดิม (Reference Price)</Label>
                       <Input
                         type="number"
                         placeholder="ราคาในอดีต"
@@ -1446,7 +1445,7 @@ const ItemFormDialog = ({
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>ค่าซ่อมประเมิน (ถ้ามี)</Label>
+                      <Label>ค่าซ่อมประเมิน (Repair Estimate)</Label>
                       <Input
                         type="number"
                         placeholder="ค่าช่าง+อะไหล่"
@@ -1480,7 +1479,7 @@ const ItemFormDialog = ({
                 onOpenChange(false);
               }}
             >
-              <Trash2 className="w-4 h-4 mr-2" /> ลบ
+              <Trash2 className="w-4 h-4 mr-2" /> ลบ (Delete)
             </Button>
           ) : (
             <div />
@@ -1492,14 +1491,14 @@ const ItemFormDialog = ({
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              ยกเลิก
+              ยกเลิก (Cancel)
             </Button>
             <Button
               type="submit"
               form="item-form"
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
-              {activeTab === "value" ? "บันทึกรายการ" : "ถัดไป"}
+              {activeTab === "value" ? "บันทึกรายการ (Save)" : "ถัดไป (Next)"}
             </Button>
           </div>
         </DialogFooter>
