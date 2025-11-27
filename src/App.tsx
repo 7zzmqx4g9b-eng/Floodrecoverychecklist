@@ -57,7 +57,7 @@ const PLAYBOOK_DATA: Section[] = [
     color: 'text-red-500',
     subSections: [
       {
-        title: '1.1 ตรวจสอบโครงส���้างบ้าน',
+        title: '1.1 ตรวจสอบโครงสร้างบ้าน',
         items: [
           { id: 's1-1', text: 'ห้ามเข้าบ้านทันทีหากเห็นเสา/กำแพงเอียง หรือแตกร้าว', isWarning: true },
           { id: 's1-2', text: 'ตรวจสอบหลังคาทรุด หรือพื้นยุบ', isWarning: true },
@@ -269,7 +269,7 @@ const SectionCard = ({ section, onClick, progress }: { section: Section, onClick
 
   return (
     <Card 
-      className="mb-4 cursor-pointer hover:shadow-md transition-shadow active:scale-[0.99] border-l-4 overflow-hidden"
+      className="cursor-pointer hover:shadow-md transition-shadow active:scale-[0.99] border-l-4 overflow-hidden h-full"
       style={{ borderLeftColor: 'currentColor' }} 
       onClick={onClick}
     >
@@ -326,14 +326,16 @@ const ChecklistDetail = ({ section, checkedItems: initialCheckedItems, onSave, o
       className="fixed inset-0 bg-white z-50 flex flex-col"
     >
       {/* Header */}
-      <div className="border-b p-4 flex items-center gap-3 bg-white shadow-sm sticky top-0 z-10 safe-area-top">
-        <Button variant="ghost" size="icon" onClick={onCancel}>
-          <ChevronRight className="w-6 h-6 rotate-180" />
-        </Button>
-        <div className="flex-1">
-          <h2 className="font-bold text-lg truncate pr-2 text-slate-900">{section.title}</h2>
+      <div className="border-b bg-white shadow-sm sticky top-0 z-10 safe-area-top">
+        <div className="p-4 flex items-center gap-3 max-w-2xl mx-auto">
+          <Button variant="ghost" size="icon" onClick={onCancel}>
+            <ChevronRight className="w-6 h-6 rotate-180" />
+          </Button>
+          <div className="flex-1">
+            <h2 className="font-bold text-lg truncate pr-2 text-slate-900">{section.title}</h2>
+          </div>
+          {Icon && <Icon className={cn("w-6 h-6", section.color)} />}
         </div>
-        {Icon && <Icon className={cn("w-6 h-6", section.color)} />}
       </div>
 
       {/* Content */}
@@ -574,7 +576,7 @@ export default function App() {
       <div className="print:hidden">
         {/* Header */}
         <header className="bg-white border-b sticky top-0 z-10 shadow-sm">
-          <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             <div>
               <h1 className="font-bold text-xl text-slate-900 leading-none">คู่มือฟื้นฟู</h1>
               <p className="text-xs text-slate-500 mt-1">Flood Recovery Playbook</p>
@@ -586,29 +588,33 @@ export default function App() {
           </div>
         </header>
 
-        <main className="max-w-md mx-auto p-4 space-y-6">
+        <main className="max-w-5xl mx-auto p-4 space-y-6">
           
           {/* Intro Card */}
           <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100 shadow-sm overflow-hidden relative">
             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full -mr-10 -mt-10 opacity-50" />
             <CardContent className="p-5 relative z-10">
-              <h2 className="font-bold text-blue-900 text-lg mb-2">เริ่มจากตรงไหนดี?</h2>
-              <p className="text-sm text-blue-800 leading-relaxed mb-4">
-                ทำตามเช็กลิสต์ด้านล่างทีละขั้นตอน เพื่อความปลอดภัยและรักษาสิทธิ์การเยียวยาของคุณ
-              </p>
-              <div className="flex flex-wrap gap-2">
-                 <a href="tel:1323" className="flex items-center gap-1.5 text-xs font-semibold bg-white px-3 py-2 rounded-lg text-slate-700 border shadow-sm hover:bg-slate-50 active:scale-95 transition-all">
-                   <Phone className="w-3.5 h-3.5 text-pink-500" /> สายด่วนสุขภาพจิต 1323
-                 </a>
-                 <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="h-auto py-2 px-3 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 border-slate-200 shadow-sm"
-                    onClick={handlePrint}
-                  >
-                    <Printer className="w-3.5 h-3.5 mr-1.5" />
-                    พิมพ์ / บันทึก PDF
-                 </Button>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="max-w-2xl">
+                  <h2 className="font-bold text-blue-900 text-lg mb-2">เริ่มจากตรงไหนดี?</h2>
+                  <p className="text-sm text-blue-800 leading-relaxed mb-4 md:mb-0">
+                    ทำตามเช็กลิสต์ด้านล่างทีละขั้นตอน เพื่อความปลอดภัยและรักษาสิทธิ์การเยียวยาของคุณ
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 shrink-0">
+                   <a href="tel:1323" className="flex items-center gap-1.5 text-xs font-semibold bg-white px-3 py-2 rounded-lg text-slate-700 border shadow-sm hover:bg-slate-50 active:scale-95 transition-all">
+                     <Phone className="w-3.5 h-3.5 text-pink-500" /> สายด่วนสุขภาพจิต 1323
+                   </a>
+                   <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="h-auto py-2 px-3 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 border-slate-200 shadow-sm"
+                      onClick={handlePrint}
+                    >
+                      <Printer className="w-3.5 h-3.5 mr-1.5" />
+                      พิมพ์ / บันทึก PDF
+                   </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -620,14 +626,16 @@ export default function App() {
             <span className="text-xs text-slate-400">{Object.values(checkedItems).filter(Boolean).length} รายการที่ทำแล้ว</span>
           </div>
           
-          {PLAYBOOK_DATA.map(section => (
-            <SectionCard 
-              key={section.id} 
-              section={section} 
-              onClick={() => setActiveSectionId(section.id)}
-              progress={calculateSectionProgress(section)}
-            />
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {PLAYBOOK_DATA.map(section => (
+              <SectionCard 
+                key={section.id} 
+                section={section} 
+                onClick={() => setActiveSectionId(section.id)}
+                progress={calculateSectionProgress(section)}
+              />
+            ))}
+          </div>
         </div>
         
         {/* Footer Actions */}
